@@ -164,7 +164,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para
 
 **Jorge López**
 - GitHub: [@jorgelopez21](https://github.com/jorgelopez21)
-- Email: [tu-email@ejemplo.com]
+- Email: jolope2005@gmail.com
 
 ---
 
