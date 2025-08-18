@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelos 3D de Sillas</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪑</text></svg>">
+    <style>
+        :root {
+            --bg-color: #f0f0f0;
+            --text-color: #333;
+            --button-bg: #007bff;
+            --button-hover-bg: #0056b3;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #333;
+                --text-color: #f0f0f0;
+                --button-bg: #666;
+                --button-hover-bg: #888;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1 {
+            color: var(--text-color);
+        }
+        .button-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--button-bg);
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: var(--button-hover-bg);
+        }
+    </style>
+</head>
+<body>
+    <h1>Selecciona un Modelo 3D</h1>
+    <div class="button-container">
+        <a href="silla_infantil.html" class="button">Silla Infantil</a>
+        <a href="butaco.html" class="button">Butaco</a>
+    </div>
+    <script>
+        function applyTheme() {
+            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.style.setProperty('--bg-color', prefersDarkMode ? '#333' : '#f0f0f0');
+            document.documentElement.style.setProperty('--text-color', prefersDarkMode ? '#f0f0f0' : '#333');
+            document.documentElement.style.setProperty('--button-bg', prefersDarkMode ? '#666' : '#007bff');
+            document.documentElement.style.setProperty('--button-hover-bg', prefersDarkMode ? '#888' : '#0056b3');
+        }
+
+        // Apply theme on initial load
+        applyTheme();
+
+        // Listen for changes in system theme preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+    </script>
+</body>
+</html>

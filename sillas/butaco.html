@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Butaco</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪑</text></svg>">
+  <style>
+    body { margin: 0; overflow: hidden; font-family: sans-serif; }
+    #info { position: absolute; top: 10px; left: 10px; color: white; background: rgba(0,0,0,0.6); padding: 8px; border-radius: 6px; font-size: 14px; }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://threejs.org/build/three.module.js",
+      "three/addons/": "https://threejs.org/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="info">Arrastra para girar | Rueda para zoom | <b>Vista 3D: Butaco</b></div>
+
+  <div id="material-list" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 6px; font-size: 14px; color: black; display: none; max-width: 300px; z-index: 10;">
+    <h3>Lista de Materiales (para 2 butacos)</h3>
+    <p><strong>Dimensiones Generales del Material:</strong></p>
+    <ul>
+        <li>`pataAncho`: 3 cm (Ancho y profundidad de patas y soportes)</li>
+        <li>`grosorAsiento`: 2 cm (Grosor de asiento)</li>
+    </ul>
+    <p><strong>Piezas:</strong></p>
+    <ul>
+        <li><strong>Asientos (2 unidades):</strong> 25 cm (Ancho) x 35 cm (Profundidad) x 2 cm (Grosor)</li>
+        <li><strong>Patas (8 unidades):</strong> 3 cm (Ancho) x 20 cm (Alto) x 3 cm (Profundidad)</li>
+        <li><strong>Soportes Frontales (2 unidades):</strong> 19 cm (Ancho) x 3 cm (Alto) x 3 cm (Profundidad)</li>
+        <li><strong>Soportes Traseros (2 unidades):</strong> 19 cm (Ancho) x 3 cm (Alto) x 3 cm (Profundidad)</li>
+        <li><strong>Soportes Laterales (4 unidades):</strong> 3 cm (Ancho) x 3 cm (Alto) x 29 cm (Profundidad)</li>
+    </ul>
+</div>
+<button id="back-to-index" style="position: absolute; top: 10px; right: 10px; z-index: 10; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.6); color: white; border: none; cursor: pointer;">Volver al Índice</button>
+<button id="toggle-materials" style="position: absolute; top: 10px; right: 150px; z-index: 10; padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.6); color: white; border: none; cursor: pointer;">Mostrar Materiales</button>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const scene = new THREE.Scene();
+    
+    // --- Tema Oscuro/Claro ---
+    function applyTheme() {
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+            scene.background = new THREE.Color(0x333333); // Fondo oscuro
+        } else {
+            scene.background = new THREE.Color(0xeeeeee); // Fondo claro
+        }
+    }
+    applyTheme(); // Aplicar tema al inicio
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); // Cambiar tema si la preferencia del sistema cambia
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 2000);
+    camera.position.set(80, 100, 120);
+
+    const renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 30, 0);
+
+    // Luces
+    const light = new THREE.DirectionalLight(0xffffff, 1.2);
+    light.position.set(150, 200, 100);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+
+    // Materiales
+    const matAsiento = new THREE.MeshStandardMaterial({color: 0xff0000, name: 'Rojo Asiento'}); // Rojo para el asiento
+    const matPatas = new THREE.MeshStandardMaterial({color: 0x8b4513, name: 'SaddleBrown'});
+
+    // --- Geometría Simplificada con BoxGeometry ---
+
+    // Dimensiones
+    const anchoSilla = 25; // Ancho del butaco
+    const profundidadSilla = 35; // Profundidad del butaco
+    const grosorAsiento = 2;
+    const altoAsientoDesdePiso = 20;
+    const pataAncho = 3;
+    const pataLargoFront = altoAsientoDesdePiso;
+    const pataLargoBack = altoAsientoDesdePiso;
+    const soporteAlturaDesdePiso = 10; // Altura de los soportes desde el suelo
+
+    // Asiento
+    const geoAsiento = new THREE.BoxGeometry(anchoSilla, grosorAsiento, profundidadSilla);
+    const asiento = new THREE.Mesh(geoAsiento, matAsiento);
+    asiento.position.y = altoAsientoDesdePiso - (grosorAsiento / 2);
+    scene.add(asiento);
+
+    // Posiciones de las patas
+    const pataOffsetX = anchoSilla / 2 - pataAncho / 2;
+    const pataOffsetZ = profundidadSilla / 2 - pataAncho / 2;
+
+    // Pata Delantera Izquierda
+    const geoPata = new THREE.BoxGeometry(pataAncho, pataLargoFront, pataAncho);
+    const pata1 = new THREE.Mesh(geoPata, matPatas);
+    pata1.position.set(-pataOffsetX, pataLargoFront / 2, -pataOffsetZ);
+    scene.add(pata1);
+
+    // Pata Delantera Derecha
+    const pata2 = pata1.clone();
+    pata2.position.x = pataOffsetX;
+    scene.add(pata2);
+
+    // Pata Trasera Izquierda
+    const geoPataBack = new THREE.BoxGeometry(pataAncho, pataLargoBack, pataAncho);
+    const pata3 = new THREE.Mesh(geoPataBack, matPatas);
+    pata3.position.set(-pataOffsetX, pataLargoBack / 2, pataOffsetZ);
+    scene.add(pata3);
+
+    // Pata Trasera Derecha
+    const pata4 = pata3.clone();
+    pata4.position.x = pataOffsetX;
+    scene.add(pata4);
+
+    // --- Soportes para Rigidez ---
+    const soporteGrosor = pataAncho; // Usamos el mismo grosor que las patas
+    const soporteY = soporteAlturaDesdePiso + (soporteGrosor / 2);
+
+    // Soporte Frontal
+    const geoSoporteFront = new THREE.BoxGeometry(anchoSilla - (2 * pataAncho), soporteGrosor, soporteGrosor);
+    const soporteFront = new THREE.Mesh(geoSoporteFront, matPatas);
+    soporteFront.position.set(0, soporteY, -pataOffsetZ);
+    scene.add(soporteFront);
+
+    // Soporte Trasero
+    const geoSoporteBack = new THREE.BoxGeometry(anchoSilla - (2 * pataAncho), soporteGrosor, soporteGrosor);
+    const soporteBack = new THREE.Mesh(geoSoporteBack, matPatas);
+    soporteBack.position.set(0, soporteY, pataOffsetZ);
+    scene.add(soporteBack);
+
+    // Soporte Lateral Izquierdo
+    const geoSoporteSide = new THREE.BoxGeometry(soporteGrosor, soporteGrosor, profundidadSilla - (2 * pataAncho));
+    const soporteSideLeft = new THREE.Mesh(geoSoporteSide, matPatas);
+    soporteSideLeft.position.set(-pataOffsetX, soporteY, 0);
+    scene.add(soporteSideLeft);
+
+    // Soporte Lateral Derecho
+    const soporteSideRight = soporteSideLeft.clone();
+    soporteSideRight.position.x = pataOffsetX;
+    scene.add(soporteSideRight);
+
+    // --- Preparación para Animación de Explosión ---
+    const chairParts = [];
+    chairParts.push(asiento, pata1, pata2, pata3, pata4, soporteFront, soporteBack, soporteSideLeft, soporteSideRight);
+
+    chairParts.forEach(part => {
+        part.userData.initialPosition = part.position.clone();
+        part.userData.direction = new THREE.Vector3().subVectors(part.position, new THREE.Vector3(0, 30, 0)).normalize(); // Dirección desde el centro del butaco
+    });
+
+    let isExploded = false;
+    let animationProgress = 0; // 0 a 1 para explotar, 1 a 0 para reensamblar
+    const animationSpeed = 0.02; // Velocidad de la animación
+    const explosionFactor = 50; // Qué tan lejos se separan las piezas
+
+    // Evento de clic para alternar la explosión
+    renderer.domElement.addEventListener('click', () => {
+        isExploded = !isExploded;
+    });
+
+    // --- Helpers ---
+    const grid = new THREE.GridHelper(200, 20);
+    scene.add(grid);
+    const axes = new THREE.AxesHelper(20);
+    scene.add(axes);
+
+    // --- Bucle de Animación ---
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Actualizar progreso de la animación
+      if (isExploded) {
+          animationProgress += animationSpeed;
+          if (animationProgress > 1) animationProgress = 1;
+      } else {
+          animationProgress -= animationSpeed;
+          if (animationProgress < 0) animationProgress = 0;
+      }
+
+      // Mover las piezas
+      chairParts.forEach(part => {
+          part.position.copy(part.userData.initialPosition).addScaledVector(part.userData.direction, explosionFactor * animationProgress);
+      });
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', ()=>{
+      camera.aspect = window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // --- Lógica para Mostrar/Ocultar Lista de Materiales ---
+    const materialListDiv = document.getElementById('material-list');
+    const toggleMaterialsButton = document.getElementById('toggle-materials');
+    const backToIndexButton = document.getElementById('back-to-index');
+
+    toggleMaterialsButton.addEventListener('click', () => {
+        if (materialListDiv.style.display === 'none') {
+            materialListDiv.style.display = 'block';
+            toggleMaterialsButton.textContent = 'Ocultar Materiales';
+        } else {
+            materialListDiv.style.display = 'none';
+            toggleMaterialsButton.textContent = 'Mostrar Materiales';
+        }
+    });
+
+    backToIndexButton.addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
