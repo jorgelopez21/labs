@@ -1,6 +1,0 @@
-# Manifiesto oficial de ArgoCD
-# Descargado de https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-# Puedes aplicar este archivo con:
-# kubectl apply -f argocd-install.yaml
-# Contiene todos los recursos necesarios para ArgoCD
-# Por tamaño, se recomienda descargarlo directamente si lo necesitas completo en local.
