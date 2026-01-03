@@ -20,9 +20,9 @@
                 banner.innerHTML = '⚠️ Sitio actualizado. Nos hemos mudado a <a href="https://calcredito.minube.dev" style="color:black;text-decoration:underline;">calcredito.minube.dev</a>. Redirigiendo en 5 segundos...';
                 document.body.style.marginTop = '50px';
                 document.body.insertBefore(banner, document.body.firstChild);
-                // setTimeout(function () {
-                //     window.location.href = 'https://calcredito.minube.dev';
-                // }, 5000);
+                setTimeout(function () {
+                    window.location.href = 'https://calcredito.minube.dev';
+                }, 5000);
             }
         });
     </script>
@@ -282,7 +282,6 @@
             </div>
         </div>
     </div>
-    </div>
 
     <!-- Botón de Cálculo (Visible ahora) -->
     <div class="calc-button-container">
@@ -374,6 +373,7 @@
     <footer class="app-footer-simple">
         <p>
             v1.1.0 - <a href="https://github.com/jorgelopez21/labs" target="_blank" rel="noopener noreferrer">GitHub</a>
+            | <a href="mailto:contacto@minube.dev">contacto@minube.dev</a>
         </p>
     </footer>
 
