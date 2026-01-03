@@ -109,6 +109,21 @@ function setupEventListeners() {
     document.getElementById('interestRate').addEventListener('input', handleRateInput);
     document.getElementById('newRate').addEventListener('input', handleRateInput);
 
+    // Validar plazo en tiempo real (max 3 dígitos y <= 360)
+    document.getElementById('term').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/[^\d]/g, '');
+        if (value.length > 3) value = value.substring(0, 3);
+
+        const numValue = parseInt(value);
+        if (numValue > 360) {
+            value = '360';
+        }
+
+        if (value !== e.target.value) {
+            e.target.value = value;
+        }
+    });
+
     // Validación al perder el foco
     document.getElementById('loanAmount').addEventListener('blur', validateAmount);
     document.getElementById('term').addEventListener('blur', validatePositiveInteger);
@@ -131,6 +146,26 @@ function setupEventListeners() {
     document.getElementById('addRateChange').addEventListener('click', addRateChange);
     document.getElementById('calculateAmortization').addEventListener('click', () => calculateAmortization(false));
     document.getElementById('exportCsv').addEventListener('click', exportToCSV);
+
+    // Validar meses en tiempo real (max 3 dígitos y <= plazo actual)
+    const handleMonthInput = function (e) {
+        let value = e.target.value.replace(/[^\d]/g, '');
+        if (value.length > 3) value = value.substring(0, 3);
+
+        const term = parseInt(document.getElementById('term').value) || 360;
+        const numValue = parseInt(value);
+
+        if (numValue > term) {
+            value = term.toString();
+        }
+
+        if (value !== e.target.value) {
+            e.target.value = value;
+        }
+    };
+
+    document.getElementById('contributionMonth').addEventListener('input', handleMonthInput);
+    document.getElementById('rateChangeMonth').addEventListener('input', handleMonthInput);
 
     const realtimeInputs = [
         'loanAmount',
@@ -289,8 +324,16 @@ function handleRateInput(event) {
 
     // Limitar a un solo punto decimal
     const parts = value.split('.');
+
+    // Limitar enteros a 2 dígitos
+    if (parts[0].length > 2) {
+        parts[0] = parts[0].substring(0, 2);
+    }
+
     if (parts.length > 2) {
         value = parts[0] + '.' + parts.slice(1).join('');
+    } else {
+        value = parts.join('.');
     }
 
     // Limitar a 2 decimales
@@ -319,9 +362,26 @@ function handleAmountInput(event) {
     }
 
     const number = parseInt(numericValue);
+
+    // Validar límite de dígitos SOLO para el monto del crédito
+    if (event.target.id === 'loanAmount') {
+        const maxDigits = 10;
+        if (numericValue.length > maxDigits) {
+            numericValue = numericValue.substring(0, maxDigits);
+        }
+    } else if (event.target.id === 'contributionAmount') {
+        const loanAmount = parseFormattedNumber(document.getElementById('loanAmount').value);
+        if (loanAmount > 0) { // Solo validar si hay un monto de préstamo válido
+            if (parseInt(numericValue) > loanAmount) {
+                numericValue = loanAmount.toString();
+            }
+        }
+    }
+
+    // Límite general de seguridad (para contributions y otros)
     const maxAmount = 999999999999;
 
-    if (number > maxAmount) {
+    if (parseInt(numericValue) > maxAmount) {
         numericValue = maxAmount.toString();
     }
 
@@ -368,6 +428,9 @@ function validatePositiveInteger(event) {
     if (isNaN(value) || value <= 0) {
         event.target.classList.add('error-input');
         showErrorMessage(event.target, 'Debe ingresar un valor entero positivo mayor que cero');
+    } else if (event.target.id === 'term' && value > 360) {
+        event.target.classList.add('error-input');
+        showErrorMessage(event.target, 'El plazo máximo permitido es de 360 meses');
     } else {
         event.target.classList.remove('error-input');
         removeErrorMessage(event.target);
