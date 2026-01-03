@@ -281,6 +281,9 @@ function updateNewRateTypeOptions() {
 function handleRateInput(event) {
     let value = event.target.value;
 
+    // Reemplazar comas por puntos para soporte decimal
+    value = value.replace(/,/g, '.');
+
     // Permitir solo números, punto decimal y nada más
     value = value.replace(/[^\d.]/g, '');
 

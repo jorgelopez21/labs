@@ -87,15 +87,16 @@
                         <div class="form-group">
                             <label for="loanAmount" class="form-label" data-translate="loanAmount">Monto del
                                 Préstamo</label>
-                            <input type="text" id="loanAmount" class="form-control" placeholder="200,000,000">
+                            <input type="text" id="loanAmount" class="form-control" placeholder="200,000,000"
+                                inputmode="numeric">
                         </div>
 
                         <!-- Input de Tasa Compacto -->
                         <div class="form-group">
                             <label class="form-label" data-translate="interestRate">Tasa de Interés</label>
                             <div class="input-group-compact">
-                                <input type="number" id="interestRate" class="form-control" step="0.01" min="0"
-                                    max="100" placeholder="10.00%">
+                                <input type="text" id="interestRate" class="form-control" inputmode="decimal"
+                                    placeholder="10.00%">
                                 <select id="rateType" class="form-control">
                                     <!-- Options generated dynamically -->
                                 </select>
@@ -139,7 +140,8 @@
 
                     <div class="form-group">
                         <label for="contributionAmount" class="form-label" data-translate="amount">Monto</label>
-                        <input type="text" id="contributionAmount" class="form-control" placeholder="0">
+                        <input type="text" id="contributionAmount" class="form-control" placeholder="0"
+                            inputmode="numeric">
                     </div>
 
                     <div class="form-group">
@@ -181,7 +183,7 @@
                     <div class="form-group">
                         <label class="form-label" data-translate="newRate">Nueva Tasa</label>
                         <div class="input-group-compact">
-                            <input type="number" id="newRate" class="form-control" step="0.01" min="0" max="100"
+                            <input type="text" id="newRate" class="form-control" inputmode="decimal"
                                 placeholder="10.00%">
                             <select id="newRateType" class="form-control">
                                 <!-- Options generated dynamically -->
@@ -372,7 +374,7 @@
     <!-- Pie de página Simplificado -->
     <footer class="app-footer-simple">
         <p>
-            v1.1.0 - <a href="https://github.com/jorgelopez21/labs" target="_blank" rel="noopener noreferrer">GitHub</a>
+            v1.1.1 - <a href="https://github.com/jorgelopez21/labs" target="_blank" rel="noopener noreferrer">GitHub</a>
             | <a href="mailto:contacto@minube.dev">contacto@minube.dev</a>
         </p>
     </footer>

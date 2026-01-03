@@ -55,7 +55,7 @@ const translations = {
         single: "Único",
         recurring: "Recurrente",
         amount: "Monto",
-        applicationMonth: "Mes de Aplicación",
+        applicationMonth: "Mes de Aplicación/Altura de cuota",
         strategy: "Estrategia",
         reduceTerm: "Reducir Plazo (mantener cuota)",
         reducePayment: "Reducir Cuota (mantener plazo)",
