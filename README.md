@@ -2,7 +2,7 @@
 
 Una calculadora avanzada de amortización con soporte multiidioma y multimoneda, desarrollada con HTML, CSS y JavaScript puro.
 
-![Versión](https://img.shields.io/badge/Versión-1.1.0-blue)
+![Versión](https://img.shields.io/badge/Versión-1.1.2-blue)
 ![Licencia](https://img.shields.io/badge/Licencia-MIT-green)
 
 ## 🌟 Características Principales
